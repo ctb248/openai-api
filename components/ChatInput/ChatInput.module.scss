@@ -1,0 +1,49 @@
+.userInput {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+  flex: 1;
+}
+
+.inputWrapper {
+  position: relative;
+  display: flex;
+  width: 100%;
+}
+
+.inputField {
+  flex: 1;
+  outline: none;
+  margin-bottom: 12px;
+  padding: 12px;
+  padding-right: 60px;
+  border-radius: 5px;
+  outline: none;
+  resize: none;
+  border: 1px solid #ddd;
+  background-color: #f1f1f1;
+}
+
+.sendButton {
+  //   background-color: #007bff;
+  background-color: transparent;
+  color: #ffffff;
+  border: none;
+  border-radius: 10%;
+  cursor: pointer;
+  outline: none;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  transform: translate(0, -60%);
+  top: 50%;
+  right: 15px;
+
+  &:hover {
+    background-color: #dcd6d6;
+  }
+}

@@ -1,54 +1,69 @@
 import Head from "next/head";
-import { useState } from "react";
-import { Button } from "@nextui-org/react";
+import { useState, useRef } from "react";
 import styles from "./index.module.scss";
 import AudioRecorder from "../components/AudioRecorder/AudioRecorder";
+import ChatWindow, { Message } from "../components/Chat/Chat";
 import apiClient from "../utils/client/api-client";
+import ChatInput from "../components/ChatInput/ChatInput";
+
+// const fakeMessages = [
+//   {
+//     sender: "bot",
+//     content: "Hello!",
+//   },
+//   { sender: "user", content: "Hello!" },
+// ];
 
 export default function Home() {
-  const [userInput, setUserInput] = useState("");
-  const [results, setResults] = useState();
+  const [userInput, setUserInput] = useState<string>("");
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  // const getModels = async () => {
-  //   try {
-  //     const response = await fetch("/api/models");
-  //     const data = await response.json();
-  //     console.log(data);
-  //   } catch (e) {
-  //     alert(e.message);
-  //   }
-  // };
-
-  // async function onSubmit(event) {
-  //   event.preventDefault();
-  //   try {
-  //     const response = await fetch("/api/generate", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({ animal: userInput }),
-  //     });
-
-  //     const data = await response.json();
-  //     if (response.status !== 200) {
-  //       throw (
-  //         data.error ||
-  //         new Error(`Request failed with status ${response.status}`)
-  //       );
-  //     }
-
-  //     setResults(data.result);
-  //     setUserInput("");
-  //   } catch (error) {
-  //     // Consider implementing your own error handling logic here
-  //     console.error(error);
-  //     alert(error.message);
-  //   }
-  // }
+  const submitRef = useRef();
 
   const handleRecordingComplete = async (file: Blob) => {
-    const res = await apiClient.convertAudio(file);
+    const { text } = await apiClient
+      .convertAudio(file, password)
+      .then((res) => res.json());
+    if (text) {
+      setUserInput(text);
+    }
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setUserInput(e.target.value);
+  };
+
+  const fetchResponse = async (input: string) => {
+    try {
+      setLoading(true);
+      const response = await apiClient.generateResponse(input, password);
+      const { text, audio } = await response.json();
+
+      const newMessage: Message = {
+        sender: "user",
+        content: input,
+      };
+
+      setMessages((prevMessages) => [...prevMessages, newMessage]);
+      const newResponse: Message = {
+        sender: "bot",
+        content: text,
+      };
+      setMessages((prevMessages) => [...prevMessages, newResponse]);
+      setUserInput("");
+      const botSpeech = new Audio("data:audio/mp3;base64," + audio);
+      setLoading(false);
+      botSpeech.play();
+    } catch (e) {
+      console.log("errorr");
+      setLoading(false);
+    }
+  };
+
+  const handleSendMessage = async (message: string) => {
+    fetchResponse(message);
   };
 
   return (
@@ -59,22 +74,26 @@ export default function Home() {
       </Head>
 
       <main className={styles.main}>
-        {/* <img src="/dog.png" className={styles.icon} />
-        <h3>Name my pet</h3>
-        <form onSubmit={onSubmit}>
+        <div>
+          Enter Password:{" "}
           <input
-            type="text"
-            name="animal"
-            placeholder="Enter an animal"
-            value={userInput}
-            onChange={(e) => setUserInput(e.target.value)}
+            type="password"
+            value={password}
+            onChange={(e) => {
+              setPassword(e.target.value);
+            }}
           />
-          <input type="submit" value="Generate names" />
-        </form>
-        <div className={styles.results}>{results}</div> */}
-        <div className="controls">
-          {/* <Button onClick={getModels}>Get Models</Button> */}
+        </div>
+        <ChatWindow messages={messages} loading={loading} />
+        <div className={styles.divider} />
+        <div className={styles.controls}>
           <AudioRecorder onRecordingComplete={handleRecordingComplete} />
+          <ChatInput
+            value={userInput}
+            onChange={handleChange}
+            submitRef={submitRef}
+            onSendMessage={handleSendMessage}
+          />
         </div>
       </main>
     </div>

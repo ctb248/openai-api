@@ -1,4 +1,4 @@
-import { Button } from "@nextui-org/react";
+import { Button, Tooltip } from "@nextui-org/react";
 import React, { useState, useRef, FC } from "react";
 import { BsFillMicFill, BsStopFill } from "react-icons/bs";
 import styles from "./AudioRecorder.module.scss";
@@ -9,7 +9,7 @@ interface AudioRecorderProps {
 
 const AudioRecorder: FC<AudioRecorderProps> = ({ onRecordingComplete }) => {
   const [recording, setRecording] = useState(false);
-  const [audioUrl, setAudioUrl] = useState(null);
+  // const [audioUrl, setAudioUrl] = useState(null);
   const [stream, setStream] = useState(null);
   const audioChunksRef = useRef([]);
 
@@ -30,11 +30,11 @@ const AudioRecorder: FC<AudioRecorderProps> = ({ onRecordingComplete }) => {
         });
         mediaRecorder.addEventListener("stop", () => {
           const audioBlob = new Blob(audioChunksRef.current, {
-            type: "audio/wav",
+            type: "audio/ogg",
           });
           onRecordingComplete(audioBlob);
-          const url = URL.createObjectURL(audioBlob);
-          setAudioUrl(url);
+          // const url = URL.createObjectURL(audioBlob);
+          // setAudioUrl(url);
           setRecording(false);
         });
         mediaRecorderRef.current = mediaRecorder;
@@ -55,23 +55,21 @@ const AudioRecorder: FC<AudioRecorderProps> = ({ onRecordingComplete }) => {
 
   return (
     <div className={styles.recorder}>
-      <Button
-        onClick={handleToggleRecording}
-        color={recording ? "warning" : "primary"}
-      >
-        {recording ? (
-          <span>
-            Stop recording
-            <BsStopFill style={{ marginLeft: 10 }} size={18} />
-          </span>
-        ) : (
-          <span>
-            Start Recording
-            <BsFillMicFill style={{ marginLeft: 10 }} size={18} />
-          </span>
-        )}
-      </Button>
-      {audioUrl && <audio src={audioUrl} controls />}
+      <Tooltip content={"Record a message"} rounded color="invert">
+        <button
+          className={`${styles.recordButton} ${
+            recording ? styles.recording : ""
+          }`}
+          onClick={handleToggleRecording}
+        >
+          {recording ? (
+            <BsStopFill size={20} color="#fff" />
+          ) : (
+            <BsFillMicFill size={20} color="#fff" />
+          )}
+        </button>
+      </Tooltip>
+      {/* {audioUrl && <audio src={audioUrl} controls />} */}
     </div>
   );
 };
