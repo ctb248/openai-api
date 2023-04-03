@@ -26,11 +26,11 @@
 }
 
 .sendButton {
-  //   background-color: #007bff;
+  background-color: #007bff;
   background-color: transparent;
   color: #ffffff;
   border: none;
-  border-radius: 10%;
+  border-radius: 50%;
   cursor: pointer;
   outline: none;
   position: absolute;
@@ -44,6 +44,6 @@
   right: 15px;
 
   &:hover {
-    background-color: #dcd6d6;
+    background-color: #ebe8e8;
   }
 }

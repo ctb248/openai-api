@@ -19,4 +19,8 @@
   &.recording {
     background-color: rgb(228, 24, 75);
   }
+
+  &:hover {
+    box-shadow: 0 4px 14px 0 var(--nextui-colors-primaryShadow);
+  }
 }

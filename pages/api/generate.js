@@ -5,7 +5,6 @@ import openai from "../../utils/server/OpenAiClient";
 
 const MODEL_CONFIG = {
   model: "text-davinci-003",
-  prompt: input,
   temperature: 0.6,
   max_tokens: 100,
 };
@@ -48,13 +47,18 @@ export default async function (req, res) {
   }
 
   try {
-    const completion = await openai.createCompletion(MODEL_CONFIG);
+    const completion = await openai.createCompletion({
+      ...MODEL_CONFIG,
+      prompt: input,
+    });
     console.log(completion.data);
 
     const aiResponse = completion.data.choices[0].text;
     const aiResponseAudioPath = await responseToSpeech(aiResponse);
     const b64audio = fs.readFileSync(aiResponseAudioPath).toString("base64");
-    fs.unlink(aiResponseAudioPath);
+    fs.unlink(aiResponseAudioPath, (err) => {
+      if (err) console.error(err);
+    });
 
     res.status(200).json({ text: aiResponse, audio: b64audio });
     // return res.status(200).json({ result: "Hello" });

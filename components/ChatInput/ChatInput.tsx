@@ -1,5 +1,4 @@
-// UserInput.js
-import React, { useState } from "react";
+import React from "react";
 import { BsSend } from "react-icons/bs";
 import styles from "./ChatInput.module.scss";
 
@@ -21,7 +20,7 @@ const UserInput = ({ onSendMessage, value, onChange, submitRef }) => {
           onChange={onChange}
         />
         <button className={styles.sendButton} type="submit">
-          <BsSend size={20} color="#444" />
+          <BsSend size={20} color="#666" />
         </button>
       </div>
     </form>

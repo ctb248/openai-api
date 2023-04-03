@@ -1,36 +1,29 @@
-import formidable from "formidable";
+import formidable, { File as FormidableFile } from "formidable";
 import fs from "fs";
-import * as child from "child_process";
+import ffmpeg from "fluent-ffmpeg";
+import ffmpegPath from "ffmpeg-static";
 import openai from "../../utils/server/OpenAiClient";
 import { NextApiRequest, NextApiResponse } from "next";
 
-interface FormidableFile {
-  filepath: string;
-  newFilename: string;
-}
-
-const convertAudio = async (filename: string): Promise<string> => {
+const convertToMp3 = async (filename: string): Promise<string> => {
   return new Promise((resolve, reject) => {
-    const inputFile = fs.createReadStream(filename);
     const outputPath = filename.replace(".ogg", ".mp3");
-    const outputStream = fs.createWriteStream(outputPath);
-    const conversion = child.spawn("ffmpeg", [
-      "-i",
-      "pipe:0",
-      "-f",
-      "mp3",
-      "pipe:1",
-    ]);
 
-    conversion.on("close", () => {
-      fs.unlinkSync(filename);
-      resolve(filename.replace(".ogg", ".mp3"));
-    });
-    conversion.on("error", () => {
-      reject();
-    });
-    inputFile.pipe(conversion.stdin);
-    conversion.stdout.pipe(outputStream);
+    // Set the ffmpeg binary path
+    ffmpeg.setFfmpegPath(ffmpegPath);
+
+    ffmpeg()
+      .input(filename)
+      .outputFormat("mp3")
+      .on("end", () => {
+        fs.unlinkSync(filename);
+        resolve(outputPath);
+      })
+      .on("error", (err) => {
+        console.error("An error occurred:", err.message);
+        reject();
+      })
+      .pipe(fs.createWriteStream(outputPath), { end: true });
   });
 };
 
@@ -45,11 +38,11 @@ const saveFile = async (file: FormidableFile) => {
 const transcribe = async (filepath: string) => {
   try {
     const stream = fs.createReadStream(filepath);
+    // Their package wants some funky custom 'File' type but it will accept a stream with a path.
     const result = await openai.createTranscription(stream as any, "whisper-1");
     return result;
   } catch (e) {
     console.log(e.response.data.error);
-    // console.log(e.request);
     console.error(e.message);
   }
 };
@@ -58,8 +51,11 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
   try {
     const form = new formidable.IncomingForm();
     form.parse(req, async function (_err, _fields, files) {
-      const savedFilePath = await saveFile(files.file);
-      const convertedFilePath = await convertAudio(savedFilePath);
+      // Audio must be formatted with ffmpeg because the Whisper API is currently screwy
+      // and will not accept either blobs or the audio files as encoded by certain browsers.
+      // There's probably a more efficient way to stream the audio without writing it to disk, but they should really just fix their API :/
+      const savedFilePath = await saveFile(files.file as FormidableFile);
+      const convertedFilePath = await convertToMp3(savedFilePath);
       const {
         data: { text },
       } = await transcribe(convertedFilePath);

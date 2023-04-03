@@ -55,7 +55,7 @@
   align-items: center;
   justify-content: center;
   position: absolute;
-  opacity: 0.3;
+  opacity: 0.4;
   z-index: 1;
 
   & .icon {
@@ -64,6 +64,8 @@
 
   & h2 {
     color: #696161;
-    font-size: 20px;
+    font-size: 32px;
+    font-family: "Lolita";
+    color: rgb(204, 37, 37);
   }
 }
