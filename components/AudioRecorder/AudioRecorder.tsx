@@ -9,8 +9,7 @@ interface AudioRecorderProps {
 
 const AudioRecorder: FC<AudioRecorderProps> = ({ onRecordingComplete }) => {
   const [recording, setRecording] = useState(false);
-  // const [audioUrl, setAudioUrl] = useState(null);
-  const [stream, setStream] = useState(null);
+  const [stream, setStream] = useState<MediaStream | null>(null);
   const audioChunksRef = useRef([]);
 
   const mediaRecorderRef = useRef(null);
@@ -33,8 +32,6 @@ const AudioRecorder: FC<AudioRecorderProps> = ({ onRecordingComplete }) => {
             type: "audio/ogg",
           });
           onRecordingComplete(audioBlob);
-          // const url = URL.createObjectURL(audioBlob);
-          // setAudioUrl(url);
           setRecording(false);
         });
         mediaRecorderRef.current = mediaRecorder;
@@ -69,7 +66,6 @@ const AudioRecorder: FC<AudioRecorderProps> = ({ onRecordingComplete }) => {
           )}
         </button>
       </Tooltip>
-      {/* {audioUrl && <audio src={audioUrl} controls />} */}
     </div>
   );
 };

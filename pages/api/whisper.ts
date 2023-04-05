@@ -66,7 +66,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
   } catch (error) {
     if (error.response) {
       console.error(error.response.status, error.response.data);
-      res.status(error.response.status).json({ ok: "sucks to suck" });
+      res.status(error.response.status).json({ error: "sucks to suck" });
     } else {
       console.error(`Error with request: ${error.message}`);
       res.status(500).json({

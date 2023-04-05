@@ -53,9 +53,9 @@ export default function Home() {
       };
       setMessages((prevMessages) => [...prevMessages, newResponse]);
       setUserInput("");
-      const botSpeech = new Audio("data:audio/mp3;base64," + audio);
+      const botSpeech = audio ?? new Audio("data:audio/mp3;base64," + audio);
       setLoading(false);
-      botSpeech.play();
+      botSpeech && botSpeech.play();
     } catch (e) {
       console.log("errorr");
       setLoading(false);

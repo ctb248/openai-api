@@ -1,6 +1,6 @@
 # OpenAI API Quickstart - Node.js example app
 
-Just a fork of the NextJS demo for messing around with the OpenAI API. Basic chat interface for interacting with a text model, also implements the Whisper API to record and transcribe user audio, as well as the Google Cloud text-to-speech API to narrate bot responses.
+Just a simple fork of the NextJS demo for messing around with the OpenAI API. Adds a basic chat interface for freeform interaction with a text model. Also implements the Whisper API to record and transcribe user audio messages, as well as the Google Cloud text-to-speech API to narrate bot responses.
 
 ![Your friendly neighborhood chatbot](openai.png)
 
@@ -44,4 +44,4 @@ Just a fork of the NextJS demo for messing around with the OpenAI API. Basic cha
    $ npm run dev
    ```
 
-You should now be able to access the app at [http://localhost:3000](http://localhost:3000)! For the full context behind this example app, check out the [tutorial](https://platform.openai.com/docs/quickstart).
+You should now be able to access the app at [http://localhost:3000](http://localhost:3000)!
