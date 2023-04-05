@@ -18,7 +18,7 @@ export default async function (req, res) {
 
   try {
     const models = await openai.listModels();
-    res.status(200).json({ result: models.data.data });
+    res.status(200).json({ models: models.data.data });
   } catch (error) {
     // Consider adjusting the error handling logic for your use case
     if (error.response) {

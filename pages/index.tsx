@@ -38,15 +38,15 @@ export default function Home() {
   const fetchResponse = async (input: string) => {
     try {
       setLoading(true);
-      const response = await apiClient.generateResponse(input, password);
-      const { text, audio } = await response.json();
-
       const newMessage: Message = {
         sender: "user",
         content: input,
       };
 
       setMessages((prevMessages) => [...prevMessages, newMessage]);
+      const response = await apiClient.generateResponse(input, password);
+      const { text, audio } = await response.json();
+
       const newResponse: Message = {
         sender: "bot",
         content: text,
@@ -74,7 +74,7 @@ export default function Home() {
       </Head>
 
       <main className={styles.main}>
-        <div>
+        {/* <div>
           Enter Password:{" "}
           <input
             type="password"
@@ -83,7 +83,7 @@ export default function Home() {
               setPassword(e.target.value);
             }}
           />
-        </div>
+        </div> */}
         <ChatWindow messages={messages} loading={loading} />
         <div className={styles.divider} />
         <div className={styles.controls}>

@@ -2,18 +2,19 @@ class ApiClient {
   convertAudio = async (blob: Blob, pw: string) => {
     const formData = new FormData();
     formData.append("file", blob, "audioBlob.ogg");
-    try {
-      const result = await fetch("/api/whisper", {
-        method: "POST",
-        body: formData,
-        headers: {
-          "X-Password": pw,
-        },
-      });
-      return result;
-    } catch (e) {
-      throw new Error(e.message);
+    const res = await fetch("/api/whisper", {
+      method: "POST",
+      body: formData,
+      headers: {
+        "X-Password": pw,
+      },
+    });
+
+    if (!res.ok) {
+      console.log(res);
+      throw new Error("Oops");
     }
+    return res;
   };
   generateResponse = async (input: string, pw: string) => {
     const res: Response = await fetch("/api/generate", {
@@ -24,6 +25,16 @@ class ApiClient {
       },
       body: JSON.stringify({ input }),
     });
+
+    if (!res.ok) {
+      console.log(res);
+      throw new Error("Unauthorized");
+    }
+
+    return res;
+  };
+  getModels = async () => {
+    const res: Response = await fetch("/api/models");
 
     if (!res.ok) {
       console.log(res);

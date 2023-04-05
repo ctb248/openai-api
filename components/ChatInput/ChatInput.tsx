@@ -4,7 +4,6 @@ import styles from "./ChatInput.module.scss";
 
 const UserInput = ({ onSendMessage, value, onChange, submitRef }) => {
   const handleSubmit = (e: React.FormEvent) => {
-    console.log(e);
     e.preventDefault();
     if (value.trim() === "") return;
     onSendMessage(value);
