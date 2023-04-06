@@ -40,7 +40,7 @@ Your own personal conversation bot! Talk to him, laugh with him, cry with him. H
 
 6. Add your [API key](https://platform.openai.com/account/api-keys) to the newly created `.env` file
 
-7. You'll need to create a Google Cloud Platform account if you don't have one, and follow the steps to create a service account key for the Text To Speech API.
+7. You'll need to create a Google Cloud Platform account if you don't have one, and follow the steps to create a service account key for the Text To Speech API. Place the JSON key file in the root folder and set the path in the `.env` file.
 
 8. Run the app
 
