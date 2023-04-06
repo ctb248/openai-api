@@ -10,7 +10,7 @@ const UserInput = ({ onSendMessage, value, onChange, submitRef }) => {
   };
 
   return (
-    <form ref={submitRef} className={styles.userInput} onSubmit={handleSubmit}>
+    <form className={styles.userInput} onSubmit={handleSubmit}>
       <div className={styles.inputWrapper}>
         <textarea
           className={styles.inputField}
@@ -18,7 +18,7 @@ const UserInput = ({ onSendMessage, value, onChange, submitRef }) => {
           value={value}
           onChange={onChange}
         />
-        <button className={styles.sendButton} type="submit">
+        <button ref={submitRef} className={styles.sendButton} type="submit">
           <BsSend size={20} color="#666" />
         </button>
       </div>

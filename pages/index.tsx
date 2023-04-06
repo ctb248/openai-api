@@ -16,14 +16,14 @@ export default function Home() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const submitRef = useRef();
+  const submitRef = useRef<HTMLFormElement>();
 
   const handleRecordingComplete = async (file: Blob) => {
     const { text } = await apiClient
       .convertAudio(file, password)
       .then((res) => res.json());
     if (text) {
-      setUserInput(text);
+      handleSendMessage(text);
     }
   };
 
@@ -53,7 +53,9 @@ export default function Home() {
       };
       setMessages((prevMessages) => [...prevMessages, newResponse]);
       setUserInput("");
-      const botSpeech = audio ?? new Audio("data:audio/mp3;base64," + audio);
+      const botSpeech = audio
+        ? new Audio("data:audio/mp3;base64," + audio)
+        : null;
       setLoading(false);
       botSpeech && botSpeech.play();
     } catch (e) {
@@ -69,7 +71,7 @@ export default function Home() {
   return (
     <div>
       <Head>
-        <title>OpenAI Quickstart</title>
+        <title>Welcome to the Machine</title>
         <link rel="icon" href="/dog.png" />
       </Head>
 

@@ -1,5 +1,6 @@
 import React, { FC } from "react";
 import { GiRobotAntennas } from "react-icons/gi";
+import { AiOutlineRobot } from "react-icons/ai";
 import LoadingScreen from "../Loading/Loading";
 import styles from "./Chat.module.scss";
 

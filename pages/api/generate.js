@@ -34,9 +34,9 @@ const responseToSpeech = async (text) => {
 export default async function (req, res) {
   console.log(req.headers["x-password"]);
   // Bleeding edge authentication. Get agile, losers.
-  if (req.headers["x-password"] !== "iAmThePassworg") {
-    return res.status(401).json({ error: "Unauthorized" });
-  }
+  // if (req.headers["x-password"] !== "iAmThePassworg") {
+  //   return res.status(401).json({ error: "Unauthorized" });
+  // }
   const input = req.body.input || "";
   if (input.trim().length === 0) {
     return res.status(400).json({
