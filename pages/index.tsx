@@ -1,20 +1,16 @@
 import Head from "next/head";
-import { useState, useRef } from "react";
+import { useState, useRef, useContext } from "react";
 import styles from "./index.module.scss";
 import AudioRecorder from "../components/AudioRecorder/AudioRecorder";
 import ChatWindow, { Message } from "../components/Chat/Chat";
 import apiClient from "../utils/client/api-client";
 import ChatInput from "../components/ChatInput/ChatInput";
-
-// const fakeMessages = [
-//   {
-//     sender: "bot",
-//     content: "Hello!",
-//   },
-//   { sender: "user", content: "Hello!" },
-// ];
+import { AppContext } from "./_app";
 
 export default function Home() {
+  const {
+    state: { model },
+  } = useContext(AppContext);
   const [userInput, setUserInput] = useState<string>("");
   const [messages, setMessages] = useState<Message[]>([]);
   const [password, setPassword] = useState("");
@@ -44,7 +40,11 @@ export default function Home() {
       };
 
       setMessages((prevMessages) => [...prevMessages, newMessage]);
-      const response = await apiClient.generateResponse(input, password);
+      const response = await apiClient.generateResponse({
+        input,
+        pw: password,
+        model,
+      });
       const { text, audio } = await response.json();
 
       const newResponse: Message = {

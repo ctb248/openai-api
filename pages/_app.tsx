@@ -6,7 +6,7 @@ import Header from "../components/Navbar/Navbar";
 import { NextUIProvider } from "@nextui-org/react";
 
 interface GlobalState {
-  tab: string;
+  model: string;
   error: string | null;
 }
 
@@ -15,11 +15,11 @@ interface AppContext {
   updateGlobalState: (newState: Partial<GlobalState>) => void;
 }
 
-const AppContext = createContext<AppContext>({} as AppContext);
+export const AppContext = createContext<AppContext>({} as AppContext);
 
 export default function App({ Component }) {
   const [globalState, setGlobalState] = useState<GlobalState>({
-    tab: "gpt",
+    model: "text-davinci-003",
     error: null,
   });
 

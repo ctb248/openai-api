@@ -2,6 +2,8 @@
 
 Just a simple fork of the NextJS demo for messing around with the OpenAI API. Adds a basic chat interface for freeform interaction with a text model. Also implements the Whisper API to record and transcribe user audio messages, as well as the Google Cloud text-to-speech API to narrate bot responses.
 
+Your own personal conversation bot! Talk to him, laugh with him, cry with him. He is here to help you, not to destroy the essential fabric of modern society.
+
 ![Your friendly neighborhood chatbot](openai.png)
 
 ## Setup
@@ -38,7 +40,9 @@ Just a simple fork of the NextJS demo for messing around with the OpenAI API. Ad
 
 6. Add your [API key](https://platform.openai.com/account/api-keys) to the newly created `.env` file
 
-7. Run the app
+7. You'll need to create a Google Cloud Platform account if you don't have one, and follow the steps to create a service account key for the Text To Speech API.
+
+8. Run the app
 
    ```bash
    $ npm run dev

@@ -20,14 +20,14 @@ class ApiClient {
       },
     });
   };
-  generateResponse = async (input: string, pw: string) => {
+  generateResponse = async ({ input, model, pw }) => {
     return fetchWrapper("/api/generate", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         "X-Password": pw,
       },
-      body: JSON.stringify({ input }),
+      body: JSON.stringify({ input, model }),
     });
   };
   getModels = async () => {

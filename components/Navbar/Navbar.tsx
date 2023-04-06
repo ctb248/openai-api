@@ -1,6 +1,12 @@
-import { Navbar, Text, Button, Link } from "@nextui-org/react";
+import { Navbar, Text } from "@nextui-org/react";
+import { useRouter } from "next/router";
+import SelectModel from "../SelectModel/SelectModel";
 
 const Header = () => {
+  const router = useRouter();
+
+  console.log(router.route);
+
   return (
     <Navbar isBordered variant={"static"}>
       <Navbar.Brand>
@@ -9,16 +15,7 @@ const Header = () => {
         </Text>
       </Navbar.Brand>
 
-      <Navbar.Content>
-        <Navbar.Link color="inherit" href="#">
-          Login
-        </Navbar.Link>
-        <Navbar.Item>
-          <Button auto flat as={Link} href="#">
-            Sign Up
-          </Button>
-        </Navbar.Item>
-      </Navbar.Content>
+      <Navbar.Content>{router.route === "/" && <SelectModel />}</Navbar.Content>
     </Navbar>
   );
 };
