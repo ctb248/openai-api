@@ -15,6 +15,9 @@ export default function Home() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [responseAudio, setResponseAudio] = useState<HTMLAudioElement | null>(
+    null
+  );
 
   const submitRef = useRef<HTMLFormElement>();
 
@@ -56,8 +59,10 @@ export default function Home() {
       const botSpeech = audio
         ? new Audio("data:audio/mp3;base64," + audio)
         : null;
+      if (botSpeech) {
+        setResponseAudio(botSpeech);
+      }
       setLoading(false);
-      botSpeech && botSpeech.play();
     } catch (e) {
       console.log("errorr");
       setLoading(false);

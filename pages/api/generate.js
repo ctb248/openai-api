@@ -37,7 +37,7 @@ export default async function (req, res) {
   // if (req.headers["x-password"] !== "iAmThePassworg") {
   //   return res.status(401).json({ error: "Unauthorized" });
   // }
-  const input = req.body.input || "";
+  const { input = "", model } = req.body;
   if (input.trim().length === 0) {
     return res.status(400).json({
       error: {
@@ -49,6 +49,7 @@ export default async function (req, res) {
   try {
     const completion = await openai.createCompletion({
       ...MODEL_CONFIG,
+      ...(model && { model }),
       prompt: input,
     });
     console.log(completion.data);
